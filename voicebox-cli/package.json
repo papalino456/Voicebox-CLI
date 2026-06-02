@@ -1,6 +1,6 @@
 {
   "name": "voicebox-cli-agent-skill",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Open Agent Skill and CLI-Anything harness for operating Voicebox from agent workflows.",
   "type": "module",
   "license": "MIT",

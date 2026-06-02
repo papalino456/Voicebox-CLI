@@ -10,17 +10,24 @@ const packageRoot = path.resolve(__dirname, "..");
 const source = path.join(packageRoot, "skills", "voicebox-cli");
 
 const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
-const destinationRoot = process.env.AGENT_SKILLS_DIR || path.join(codexHome, "skills");
-const destination = path.join(destinationRoot, "voicebox-cli");
+const globalAgentsHome = process.env.AGENTS_HOME || path.join(os.homedir(), ".agents");
+const destinationRoots = process.env.AGENT_SKILLS_DIR
+  ? [process.env.AGENT_SKILLS_DIR]
+  : [
+      path.join(codexHome, "skills"),
+      path.join(globalAgentsHome, "skills"),
+    ];
 
 if (!fs.existsSync(source)) {
   console.error(`Skill source not found: ${source}`);
   process.exit(1);
 }
 
-fs.mkdirSync(destinationRoot, { recursive: true });
-fs.rmSync(destination, { recursive: true, force: true });
-fs.cpSync(source, destination, { recursive: true });
+for (const destinationRoot of destinationRoots) {
+  const destination = path.join(destinationRoot, "voicebox-cli");
+  fs.mkdirSync(destinationRoot, { recursive: true });
+  fs.rmSync(destination, { recursive: true, force: true });
+  fs.cpSync(source, destination, { recursive: true });
 
-console.log(`Installed voicebox-cli skill to ${destination}`);
-
+  console.log(`Installed voicebox-cli skill to ${destination}`);
+}

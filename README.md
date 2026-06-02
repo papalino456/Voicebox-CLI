@@ -68,7 +68,7 @@ npx voicebox-cli-agent-skill setup
 This installs:
 
 - the Python CLI into a managed venv at `~/.voicebox-cli/venv`
-- the agent skill into `~/.codex/skills/voicebox-cli`
+- the agent skill into both `~/.codex/skills/voicebox-cli` and `~/.agents/skills/voicebox-cli`
 - a persistent `cli-anything-voicebox` shim into `~/.local/bin`
 
 Then run:
@@ -120,12 +120,14 @@ By default this copies the skill to:
 
 ```text
 ~/.codex/skills/voicebox-cli
+~/.agents/skills/voicebox-cli
 ```
 
 Override the install location when needed:
 
 ```bash
 CODEX_HOME=/path/to/codex-home npm run install-skill
+AGENTS_HOME=/path/to/agents-home npm run install-skill
 AGENT_SKILLS_DIR=/path/to/skills npm run install-skill
 ```
 

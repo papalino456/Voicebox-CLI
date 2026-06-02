@@ -28,7 +28,8 @@ Environment:
   VOICEBOX_CLI_BIN_DIR Directory for persistent command shims. Default: ~/.local/bin
   VOICEBOX_CLI_PYTHON Python executable. Default: python3, or python on Windows
   CODEX_HOME          Agent home for skills. Default: ~/.codex
-  AGENT_SKILLS_DIR    Explicit skills directory override
+  AGENTS_HOME         Global agents home for skills. Default: ~/.agents
+  AGENT_SKILLS_DIR    Explicit single skills directory override
 `);
 }
 
@@ -97,7 +98,13 @@ function installSkill() {
 
 function status() {
   const codexHome = process.env.CODEX_HOME || path.join(os.homedir(), ".codex");
-  const skillsRoot = process.env.AGENT_SKILLS_DIR || path.join(codexHome, "skills");
+  const globalAgentsHome = process.env.AGENTS_HOME || path.join(os.homedir(), ".agents");
+  const skillPaths = process.env.AGENT_SKILLS_DIR
+    ? [path.join(process.env.AGENT_SKILLS_DIR, "voicebox-cli")]
+    : [
+        path.join(codexHome, "skills", "voicebox-cli"),
+        path.join(globalAgentsHome, "skills", "voicebox-cli"),
+      ];
   console.log(JSON.stringify({
     packageRoot,
     voiceboxCliHome: home,
@@ -111,8 +118,11 @@ function status() {
     shimInstalled: fs.existsSync(process.platform === "win32"
       ? path.join(binDir, "cli-anything-voicebox.cmd")
       : path.join(binDir, "cli-anything-voicebox")),
-    skillPath: path.join(skillsRoot, "voicebox-cli"),
-    skillInstalled: fs.existsSync(path.join(skillsRoot, "voicebox-cli", "SKILL.md")),
+    skillPaths,
+    skillsInstalled: skillPaths.map((skillPath) => ({
+      path: skillPath,
+      installed: fs.existsSync(path.join(skillPath, "SKILL.md")),
+    })),
   }, null, 2));
 }
 
