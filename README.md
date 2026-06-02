@@ -59,7 +59,34 @@ The original Voicebox app code is still present because this is a true fork. The
 
 ## Install The CLI
 
-From this repository:
+Preferred one-command setup from the package directory:
+
+```bash
+cd voicebox-cli
+npm run setup
+```
+
+After the package is published to npm, users can run the same setup without cloning:
+
+```bash
+npx voicebox-cli-agent-skill setup
+```
+
+That command installs both:
+
+- the Python CLI into a managed venv at `~/.voicebox-cli/venv`
+- the agent skill into `~/.codex/skills/voicebox-cli`
+- a persistent `cli-anything-voicebox` shim into `~/.local/bin`
+
+Then run:
+
+```bash
+cli-anything-voicebox --help
+```
+
+If your shell cannot find the command, add `~/.local/bin` to `PATH`.
+
+Manual Python install is still supported:
 
 ```bash
 cd voicebox-cli
@@ -82,11 +109,11 @@ The CLI defaults to `http://127.0.0.1:17493`. Use `--base-url` if your Voicebox 
 
 The Open Agent Skill is included at [`voicebox-cli/skills/voicebox-cli`](voicebox-cli/skills/voicebox-cli/).
 
-Install it with the npm-style installer:
+If you only want to install the skill, without reinstalling the Python CLI:
 
 ```bash
 cd voicebox-cli
-node ./scripts/install-skill.js
+npm run install-skill
 ```
 
 By default this copies the skill to:
@@ -98,15 +125,8 @@ By default this copies the skill to:
 Override the install location when needed:
 
 ```bash
-CODEX_HOME=/path/to/codex-home node ./scripts/install-skill.js
-AGENT_SKILLS_DIR=/path/to/skills node ./scripts/install-skill.js
-```
-
-You can also run through npm:
-
-```bash
-cd voicebox-cli
-npm run install-skill
+CODEX_HOME=/path/to/codex-home npm run install-skill
+AGENT_SKILLS_DIR=/path/to/skills npm run install-skill
 ```
 
 ## Run The Voicebox Backend

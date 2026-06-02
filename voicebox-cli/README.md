@@ -8,7 +8,8 @@ It wraps the real Voicebox REST API. It does not reimplement TTS, model loading,
 
 - `cli-anything-voicebox`: a Python Click CLI for the Voicebox backend
 - `skills/voicebox-cli/SKILL.md`: Open Agent Skill instructions for agents
-- `scripts/install-skill.js`: npm-style skill installer
+- `scripts/voicebox-cli-agent.js`: npm one-command installer for the CLI and skill
+- `scripts/run-cli.js`: npm wrapper for the managed Python CLI
 - `VOICEBOX.md`: harness design notes
 - `TEST.md`: validation plan
 
@@ -26,11 +27,51 @@ git push -u origin main
 
 `upstream` tracks the official Voicebox repo. `origin` should be your GitHub fork or derivative repo named `Voicebox-CLI`.
 
-## Install The CLI
+## One-Command npm Setup
+
+From this package directory:
+
+```bash
+npm run setup
+```
+
+After publishing to npm:
+
+```bash
+npx voicebox-cli-agent-skill setup
+```
+
+This installs:
+
+- the Python CLI into `~/.voicebox-cli/venv`
+- the Open Agent Skill into `~/.codex/skills/voicebox-cli`
+- a persistent `cli-anything-voicebox` shim into `~/.local/bin`
+
+Then run:
+
+```bash
+cli-anything-voicebox --help
+npx voicebox-cli-agent-skill status
+```
+
+If your shell cannot find `cli-anything-voicebox`, add `~/.local/bin` to `PATH`.
+
+Configuration:
+
+```bash
+VOICEBOX_CLI_HOME=/path/to/home npx voicebox-cli-agent-skill setup
+VOICEBOX_CLI_BIN_DIR=/path/to/bin npx voicebox-cli-agent-skill setup
+VOICEBOX_CLI_PYTHON=python3.12 npx voicebox-cli-agent-skill setup
+CODEX_HOME=/path/to/codex-home npx voicebox-cli-agent-skill setup
+AGENT_SKILLS_DIR=/path/to/skills npx voicebox-cli-agent-skill setup
+```
+
+## Manual CLI Install
 
 ```bash
 git clone git@github.com:YOUR_USER/Voicebox-CLI.git
 cd Voicebox-CLI
+cd voicebox-cli
 python3 -m venv .venv
 .venv/bin/python -m pip install --upgrade pip
 .venv/bin/python -m pip install -e .
@@ -41,14 +82,13 @@ If you are using Windows/WSL, keep the Voicebox backend and CLI calls in the sam
 
 ## Install The Agent Skill
 
-From this repo:
+Install only the skill:
 
 ```bash
-npm install
 npm run install-skill
 ```
 
-Or run it without installing dependencies:
+Or run the script directly:
 
 ```bash
 node ./scripts/install-skill.js
@@ -139,4 +179,3 @@ Check package install:
 .venv/bin/python -m pip install -e .
 .venv/bin/cli-anything-voicebox --json status
 ```
-
