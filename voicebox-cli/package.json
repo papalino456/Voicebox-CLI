@@ -1,0 +1,35 @@
+{
+  "name": "voicebox-cli-agent-skill",
+  "version": "0.1.0",
+  "description": "Open Agent Skill and CLI-Anything harness for operating Voicebox from agent workflows.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "voicebox-cli-install-skill": "./scripts/install-skill.js"
+  },
+  "files": [
+    "README.md",
+    "VOICEBOX.md",
+    "TEST.md",
+    "setup.py",
+    "cli_anything/",
+    "skills/",
+    "scripts/install-skill.js"
+  ],
+  "scripts": {
+    "install-skill": "node ./scripts/install-skill.js",
+    "test:cli": "python3 -m pytest cli_anything/voicebox/tests"
+  },
+  "keywords": [
+    "voicebox",
+    "agent-skill",
+    "open-agent-skills",
+    "cli-anything",
+    "tts",
+    "kokoro"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
+

@@ -1,0 +1,4 @@
+display_name: Voicebox CLI
+short_description: Operate Voicebox through a CLI harness for local TTS generation and validation.
+default_prompt: Use the Voicebox CLI skill to check the backend, create a Kokoro preset profile, generate speech from a short script, and report the WAV path.
+
