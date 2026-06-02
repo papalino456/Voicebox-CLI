@@ -2,12 +2,12 @@
   <img src=".github/assets/icon-dark.webp" alt="Voicebox" width="120" height="120" />
 </p>
 
-<h1 align="center">Voicebox</h1>
+<h1 align="center">Voicebox-CLI</h1>
 
 <p align="center">
-  <strong>The open-source AI voice studio.</strong><br/>
-  Clone any voice. Generate speech. Dictate into any app. Talk to agents in voices you own.<br/>
-  The full voice I/O stack, running locally on your machine.
+  <strong>CLI and Agent Skill distribution for Voicebox.</strong><br/>
+  Operate a local Voicebox backend from scripts, terminals, and AI agents.<br/>
+  This fork is focused on the CLI harness, not replacing the full original desktop app.
 </p>
 
 <p align="center">
@@ -33,15 +33,138 @@
 </p>
 
 <p align="center">
-  <a href="https://voicebox.sh">voicebox.sh</a> •
-  <a href="https://docs.voicebox.sh">Docs</a> •
-  <a href="#download">Download</a> •
-  <a href="#features">Features</a> •
-  <a href="#api">API</a> •
-  <a href="docs/content/docs/overview/troubleshooting.mdx">Troubleshooting</a>
+  <a href="#voicebox-cli">Voicebox-CLI</a> •
+  <a href="#install-the-cli">Install CLI</a> •
+  <a href="#install-the-agent-skill">Install Agent Skill</a> •
+  <a href="#run-the-voicebox-backend">Run Backend</a> •
+  <a href="#upstream-voicebox">Upstream Voicebox</a>
 </p>
 
 <br/>
+
+## Voicebox-CLI
+
+This repository is a fork of [`jamiepine/voicebox`](https://github.com/jamiepine/voicebox) that adds a standalone CLI and Open Agent Skill package under [`voicebox-cli/`](voicebox-cli/).
+
+It is **not** a separate rebuild of the full Voicebox desktop app. The CLI uses the real local Voicebox backend API to manage profiles, inspect health, submit TTS jobs, and fetch generated audio metadata.
+
+Use this repo when you want:
+
+- `cli-anything-voicebox`, a terminal CLI for a running Voicebox backend
+- an installable `voicebox-cli` agent skill for AI coding/automation agents
+- scripted Kokoro/Qwen/etc. speech generation without driving the Tauri UI
+- a fork that still tracks upstream Voicebox history
+
+The original Voicebox app code is still present because this is a true fork. The CLI-specific package lives in [`voicebox-cli/`](voicebox-cli/) to keep it isolated from upstream app changes.
+
+## Install The CLI
+
+From this repository:
+
+```bash
+cd voicebox-cli
+python3 -m venv .venv
+.venv/bin/python -m pip install --upgrade pip
+.venv/bin/python -m pip install -e .
+.venv/bin/cli-anything-voicebox --help
+```
+
+Common checks:
+
+```bash
+.venv/bin/cli-anything-voicebox --json status
+.venv/bin/cli-anything-voicebox --json health
+```
+
+The CLI defaults to `http://127.0.0.1:17493`. Use `--base-url` if your Voicebox backend runs elsewhere.
+
+## Install The Agent Skill
+
+The Open Agent Skill is included at [`voicebox-cli/skills/voicebox-cli`](voicebox-cli/skills/voicebox-cli/).
+
+Install it with the npm-style installer:
+
+```bash
+cd voicebox-cli
+node ./scripts/install-skill.js
+```
+
+By default this copies the skill to:
+
+```text
+~/.codex/skills/voicebox-cli
+```
+
+Override the install location when needed:
+
+```bash
+CODEX_HOME=/path/to/codex-home node ./scripts/install-skill.js
+AGENT_SKILLS_DIR=/path/to/skills node ./scripts/install-skill.js
+```
+
+You can also run through npm:
+
+```bash
+cd voicebox-cli
+npm run install-skill
+```
+
+## Run The Voicebox Backend
+
+The CLI wraps a real Voicebox backend. From this repository root:
+
+```bash
+python3 -m venv backend/venv
+backend/venv/bin/python -m pip install --upgrade pip
+backend/venv/bin/python -m pip install -r backend/requirements.txt
+```
+
+Start the backend with a writable model cache:
+
+```bash
+VOICEBOX_MODELS_DIR="$PWD/data/models" \
+  backend/venv/bin/python -m backend.main --host 127.0.0.1 --port 17493
+```
+
+In WSL or sandboxed agent environments, start the backend and run CLI calls in the same network/security context. If `localhost` calls time out, restart the backend in the same context used by the CLI command.
+
+## Generate Speech With Kokoro
+
+Create a Kokoro preset profile:
+
+```bash
+cd voicebox-cli
+.venv/bin/cli-anything-voicebox --json profile create \
+  --name "Kokoro Narrator" \
+  --description "Kokoro preset voice" \
+  --language en \
+  --voice-type preset \
+  --preset-engine kokoro \
+  --preset-voice-id af_heart \
+  --default-engine kokoro
+```
+
+Generate a WAV file:
+
+```bash
+.venv/bin/cli-anything-voicebox --json generate \
+  --profile PROFILE_ID \
+  --engine kokoro \
+  --language en \
+  --text "Gravity is the force that pulls objects with mass toward one another."
+```
+
+Poll the result:
+
+```bash
+.venv/bin/cli-anything-voicebox --json history get GENERATION_ID
+```
+
+The completed record includes `audio_path`, usually `generations/<id>.wav`, relative to the Voicebox data directory.
+
+## Upstream Voicebox
+
+Everything below is the original upstream Voicebox project README, kept for context and backend/app documentation.
 
 <p align="center">
   <a href="https://voicebox.sh">
