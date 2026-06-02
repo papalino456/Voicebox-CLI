@@ -5,18 +5,19 @@
   "type": "module",
   "license": "MIT",
   "bin": {
-    "voicebox-cli-agent-skill": "./scripts/voicebox-cli-agent.js",
-    "voicebox-cli-agent": "./scripts/voicebox-cli-agent.js",
-    "voicebox-cli-install-skill": "./scripts/install-skill.js",
-    "cli-anything-voicebox": "./scripts/run-cli.js"
+    "voicebox-cli-agent-skill": "scripts/voicebox-cli-agent.js",
+    "voicebox-cli-agent": "scripts/voicebox-cli-agent.js",
+    "voicebox-cli-install-skill": "scripts/install-skill.js",
+    "cli-anything-voicebox": "scripts/run-cli.js"
   },
   "files": [
     "README.md",
     "VOICEBOX.md",
     "TEST.md",
     "setup.py",
-    "cli_anything/",
-    "skills/",
+    "cli_anything/**/*.py",
+    "skills/**/*.md",
+    "skills/**/*.yaml",
     "scripts/install-skill.js",
     "scripts/run-cli.js",
     "scripts/voicebox-cli-agent.js"
