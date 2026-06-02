@@ -29,13 +29,7 @@ git push -u origin main
 
 ## One-Command npm Setup
 
-From this package directory:
-
-```bash
-npm run setup
-```
-
-After publishing to npm:
+Default installation uses the published npm package:
 
 ```bash
 npx voicebox-cli-agent-skill setup
@@ -55,6 +49,12 @@ npx voicebox-cli-agent-skill status
 ```
 
 If your shell cannot find `cli-anything-voicebox`, add `~/.local/bin` to `PATH`.
+
+From a local checkout of this package, use:
+
+```bash
+npm run setup
+```
 
 Configuration:
 

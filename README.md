@@ -59,20 +59,13 @@ The original Voicebox app code is still present because this is a true fork. The
 
 ## Install The CLI
 
-Preferred one-command setup from the package directory:
-
-```bash
-cd voicebox-cli
-npm run setup
-```
-
-After the package is published to npm, users can run the same setup without cloning:
+Default installation uses the published npm package:
 
 ```bash
 npx voicebox-cli-agent-skill setup
 ```
 
-That command installs both:
+This installs:
 
 - the Python CLI into a managed venv at `~/.voicebox-cli/venv`
 - the agent skill into `~/.codex/skills/voicebox-cli`
@@ -85,6 +78,13 @@ cli-anything-voicebox --help
 ```
 
 If your shell cannot find the command, add `~/.local/bin` to `PATH`.
+
+Local clone setup is also supported:
+
+```bash
+cd voicebox-cli
+npm run setup
+```
 
 Manual Python install is still supported:
 
